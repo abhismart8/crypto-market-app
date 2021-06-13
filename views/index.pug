@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  main#main
+    h1.ui.center.aligned.header= title
+    .ui.container
+      table.ui.celled.table.center.aligned
+        thead
+          tr
+            th Logo
+            th Name
+            th Symbol
+            th Price
+            th Market Cap
+            th All Time High
+        tbody
+          each crypto in cryptocurrencies
+            tr
+              td
+                img.ui.mini.rounded.image(src=crypto.logo_url)
+              td #{crypto.name}
+              td #{crypto.symbol}
+              td #{crypto.price} USD
+              td #{crypto.market_cap}
+              td #{crypto.high} USD
+        tfoot
+          tr
+            th(colspan='6')
+    footer
+      p © #{new Date().getFullYear()} Crypto Market App
