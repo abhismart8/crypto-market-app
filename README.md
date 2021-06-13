@@ -6,8 +6,19 @@ Once its done, just clone this repo using "git clone https://github.com/abhismar
 
 Now, run "npm install" to install all the dependencies.
 
+
+## RUN MIGRATION
+
+To run the migration, first configure the database configuration in config/config.js file.
+
+After that, run "sequelize db:migrate"
+
+
+## START APPLICATION
+
 I think you are good to go now, you just need to run your application now.
 
-To run this application: "npm start"
+To run the application: "npm start" or "DEBUG=crypto-market-app:* npm start" if you want to debug your app while running.
 
-## THANK YOU
+
+## THANK YOU. ENJOY
