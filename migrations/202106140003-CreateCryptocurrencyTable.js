@@ -2,7 +2,7 @@
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('Cryptocurrencies', {
+        return queryInterface.createTable('Cryptocurrency', {
             id: {
                 allowNull: false,
                 primaryKey: true,
@@ -64,17 +64,17 @@ module.exports = {
                 allowNull: true,
                 type: Sequelize.JSON
             },
-            createdAt: {
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE
             },
-            updatedAt: {
+            updated_at: {
                 allowNull: false,
                 type: Sequelize.DATE
             },
         });
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('Cryptocurrencies')
+        return queryInterface.dropTable('Cryptocurrency')
     }
 }

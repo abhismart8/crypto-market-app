@@ -1,6 +1,7 @@
     
 exports.index = function(req, res, next) { 
     const axios = require('axios')
+    const cron = require('node-cron');
 
     const cryptoData = async () => {
     try {

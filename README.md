@@ -8,10 +8,10 @@ Now, run "npm install" to install all the dependencies.
 
 
 ## RUN MIGRATION
+<!-- To run the migration, first configure the database configuration in config/config.js file. -->
+<!-- After that, run "sequelize db:migrate" -->
 
-To run the migration, first configure the database configuration in config/config.js file.
-
-After that, run "sequelize db:migrate"
+You don't need to run migration, once you run the application, tables will be created automatically via server.
 
 
 ## START APPLICATION

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-    var Crypto = sequelize.define('Crypto', {
+    var Cryptocurrency = sequelize.define('Cryptocurrency', {
         id: {
             allowNull: false,
             primaryKey: true,
@@ -65,5 +65,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     });
 
-    return Crypto;
+    return Cryptocurrency;
 }

@@ -11,7 +11,6 @@ module.exports = {
             },
             crypto_id: {
                 allowNull: false,
-                primaryKey: true,
                 type: Sequelize.STRING
             },
             no_of_days: {
@@ -54,11 +53,11 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DECIMAL
             },
-            createdAt: {
+            created_at: {
                 allowNull: false,
                 type: Sequelize.DATE
             },
-            updatedAt: {
+            updated_at: {
                 allowNull: false,
                 type: Sequelize.DATE
             },

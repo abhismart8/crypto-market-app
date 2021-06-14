@@ -30,6 +30,10 @@ return models.sequelize.sync().then(result => {
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
+
+  // insert and update currency data
+  require('../jobs/InsertCurrencyData')
+  require('../jobs/UpdateCurrencyData')
 })
 
 /**
