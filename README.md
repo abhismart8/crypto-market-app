@@ -21,4 +21,4 @@ I think you are good to go now, you just need to run your application now.
 To run the application: "npm start" or "DEBUG=crypto-market-app:* npm start" if you want to debug your app while running.
 
 
-## THANK YOU. ENJOY
+## THANK YOU. ENJOY.
