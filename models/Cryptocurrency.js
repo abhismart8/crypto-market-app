@@ -1,69 +1,63 @@
-'use strict';
+const mongoose = require('mongoose')
+const { Schema } = mongoose;
 
-module.exports = (sequelize, DataTypes) => {
-    var Cryptocurrency = sequelize.define('Cryptocurrency', {
-        id: {
-            allowNull: false,
-            primaryKey: true,
-            type: DataTypes.STRING
-        },
-        rank: {
-            allowNull: false,
-            type: DataTypes.INTEGER
-        },
-        name: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        symbol: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        logo_url: {
-            allowNull: false,
-            type: DataTypes.TEXT
-        },
-        price: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        price_timestamp: {
-            allowNull: false,
-            type: DataTypes.DATE
-        },
-        circulating_supply: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        max_supply: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        market_cap: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        first_trade: {
-            allowNull: false,
-            type: DataTypes.DATE
-        },
-        first_order_book: {
-            allowNull: false,
-            type: DataTypes.DATE
-        },
-        all_time_high: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        all_time_high_timestamp: {
-            allowNull: false,
-            type: DataTypes.DATE
-        },
-        json_dump: {
-            allowNull: true,
-            type: DataTypes.JSON
-        }
-    });
+const Cryptocurrency = new Schema({
+    rank: {
+        type: Number,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    symbol: {
+        type: String,
+        required: true
+    },
+    logo_url: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    price_timestamp: {
+        type: Date,
+        required: true
+    },
+    circulating_supply: {
+        type: Number,
+        required: true
+    },
+    max_supply: {
+        type: Number,
+        required: true
+    },
+    market_cap: {
+        type: Number,
+        required: true
+    },
+    first_trade: {
+        type: Date,
+        required: true
+    },
+    first_order_book: {
+        type: Date,
+        required: true
+    },
+    all_time_high: {
+        type: Number,
+        required: true
+    },
+    all_time_high_timestamp: {
+        type: Date,
+        required: true
+    },
+    json_dump: {
+        type: String,
+        required: true
+    }
+})
 
-    return Cryptocurrency;
-}
+module.exports = mongoose.model('crypto', Cryptocurrency)

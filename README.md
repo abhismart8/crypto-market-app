@@ -7,11 +7,11 @@ Once its done, just clone this repo using "git clone https://github.com/abhismar
 Now, run "npm install" to install all the dependencies.
 
 
-## RUN MIGRATION
-<!-- To run the migration, first configure the database configuration in config/config.js file. -->
-<!-- After that, run "sequelize db:migrate" -->
+## INSTALL MONGODB
 
-You don't need to run migration, once you run the application, tables will be created automatically via server.
+You need to install MongoDB, [download and install MongoDB](https://www.mongodb.com/try/download/community).
+
+Note: Make sure to copy and paste the path of mongodb bin file in environment variables.
 
 
 ## START APPLICATION

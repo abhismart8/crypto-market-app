@@ -3,6 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose')
+
+
+const mongodb = 'mongodb://localhost/crypto_market_app'
+mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
+const con = mongoose.connection
+con.on('open', () => {
+    console.log('connection established')
+})
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

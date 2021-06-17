@@ -1,59 +1,51 @@
-'use strict';
+const mongoose = require('mongoose')
+const { Schema } = mongoose;
 
-module.exports = (sequelize, DataTypes) => {
-    var CryptoHistory = sequelize.define('CryptoHistory', {
-        id: {
-            allowNull: false,
-            primaryKey: true,
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
-        },
-        crypto_id: {
-            allowNull: false,
-            primaryKey: true,
-            type: DataTypes.STRING
-        },
-        no_of_days: {
-            allowNull: false,
-            type: DataTypes.INTEGER
-        },
-        volume: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        volume_change: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        volume_change_pct: {
-            allowNull: false,
-            type: DataTypes.DECIMAL
-        },
-        market_cap: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        market_cap_change: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        market_cap_change_pct: {
-            allowNull: false,
-            type: DataTypes.DECIMAL
-        },
-        price: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        price_change: {
-            allowNull: false,
-            type: DataTypes.DOUBLE
-        },
-        price_change_pct: {
-            allowNull: false,
-            type: DataTypes.DECIMAL
-        }
-    });
+const CryptoHistory = new Schema({
+    crypto_id: {
+        type: String,
+        required: true
+    },
+    no_of_days: {
+        type: Number,
+        required: true
+    },
+    volume: {
+        type: Number,
+        required: true
+    },
+    volume_change: {
+        type: Number,
+        required: true
+    },
+    volume_change_pct: {
+        type: Number,
+        required: true
+    },
+    market_cap: {
+        type: Number,
+        required: true
+    },
+    market_cap_change: {
+        type: Number,
+        required: true
+    },
+    market_cap_change_pct: {
+        type: Number,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    price_change: {
+        type: Number,
+        required: true
+    },
+    price_change_pct: {
+        type: Number,
+        required: true
+    }
+})
 
-    return CryptoHistory;
-}
+module.exports = mongoose.model('cryptohistory', CryptoHistory)

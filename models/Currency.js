@@ -1,26 +1,19 @@
-'use strict';
+const mongoose = require('mongoose')
+const { Schema } = mongoose;
 
-module.exports = (sequelize, DataTypes) => {
-    var Currency = sequelize.define('Currency', {
-        id: {
-            allowNull: false,
-            primaryKey: true,
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
-        },
-        currency_from: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        currency_to: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        conversion_value: {
-            allowNull: false,
-            type: DataTypes.FLOAT
-        }
-    });
+const Currency = new Schema({
+    currency_from: {
+        type: String,
+        required: true
+    },
+    currency_to: {
+        type: String,
+        required: true
+    },
+    conversion_value: {
+        type: Number,
+        required: true
+    }
+})
 
-    return Currency;
-}
+module.exports = mongoose.model('currency', Currency)

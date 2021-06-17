@@ -1,10 +1,10 @@
 'use strict';
 
 const insertCurrencyFunction = () => {
-    const cron = require('node-cron');
+    const mongoose = require('mongoose');
     const axios = require('axios');
-    const models = require('../models');
-    var constants = require('../config/constants');
+    const Currency = require('../models/Currency');
+    const constants = require('../config/constants');
 
     const cryptoData = async () => {
     try {
@@ -16,22 +16,51 @@ const insertCurrencyFunction = () => {
 
     const getCryptoData = async () => {
         const data = await cryptoData();
-        if (data) {
+        if (data) 
+        {
             let currencyData = data.data.conversion_rates;
             for(let currency in currencyData)
             {
-                models.Currency.create({
+                let currencyResponse = new Currency({
                     currency_from: constants.currentCurrency,
                     currency_to: currency,
                     conversion_value: currencyData[currency]
-                }).then(currency => {
-                    console.log('Currency data inserted successfully');
-                });
+                })
+
+                try
+                {
+                    currencyResponse.save()  
+                }
+                catch(err)
+                {
+                    console.log(err)
+                }
             }
+
+            console.log('Currency data inserted successfully')
         }
     }
 
-    getCryptoData();
+    const checkIfDataAlreadyExists = async () => {
+        try
+        {
+            let currency = await Currency.find()
+            if(currency.length == 0)
+            {
+                getCryptoData();
+            }
+            else
+            {
+                console.log('currency data already exists')
+            }
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+
+    checkIfDataAlreadyExists();
 }
 
 module.exports = {
