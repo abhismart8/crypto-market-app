@@ -3,11 +3,11 @@
 const updateCryptoFunction = () => {
     const cron = require('node-cron');
     const axios = require('axios');
-    const Crypto = require('../models/Currency');
+    const Crypto = require('../models/CryptoCurrency');
     const History = require('../models/CryptoHistory');
-    var constants = require('../config/constants');
+    const constants = require('../config/constants');
 
-    cron.schedule('*/10 * * * * *', () => {
+    cron.schedule('* * * * *', () => {
         const cryptoData = async () => {
             try {
                 return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY)
