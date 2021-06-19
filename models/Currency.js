@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const Currency = new Schema({
@@ -14,6 +14,6 @@ const Currency = new Schema({
         type: Number,
         required: true
     }
-})
+});
 
-module.exports = mongoose.model('currency', Currency)
+module.exports = mongoose.model('currency', Currency);

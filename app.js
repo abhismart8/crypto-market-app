@@ -10,7 +10,7 @@ const mongodb = 'mongodb://localhost/crypto_market_app'
 mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
 const con = mongoose.connection
 con.on('open', () => {
-    console.log('connection established')
+  // 
 })
 
 var indexRouter = require('./routes/index');

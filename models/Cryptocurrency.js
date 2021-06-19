@@ -1,63 +1,67 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const Cryptocurrency = new Schema({
-    rank: {
-        type: Number,
+const CryptoCurrency = new Schema({
+    id: {
+        type: String,
         required: true
     },
     name: {
         type: String,
-        required: true
+        required: false
     },
     symbol: {
         type: String,
-        required: true
+        required: false
+    },
+    rank: {
+        type: String,
+        required: false
     },
     logo_url: {
         type: String,
-        required: true
+        required: false
     },
     price: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     price_timestamp: {
-        type: Date,
-        required: true
+        type: String,
+        required: false
     },
     circulating_supply: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     max_supply: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     market_cap: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     first_trade: {
-        type: Date,
-        required: true
+        type: String,
+        required: false
     },
     first_order_book: {
-        type: Date,
-        required: true
+        type: String,
+        required: false
     },
     all_time_high: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     all_time_high_timestamp: {
-        type: Date,
-        required: true
-    },
-    json_dump: {
         type: String,
-        required: true
+        required: false
+    },
+    data_json: {
+        type: Object,
+        required: false
     }
-})
+});
 
-module.exports = mongoose.model('crypto', Cryptocurrency)
+module.exports = mongoose.model('crypto', CryptoCurrency);

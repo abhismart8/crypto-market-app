@@ -3,14 +3,13 @@
 const updateCurrencyFunction = () => {
     const cron = require('node-cron');
     const axios = require('axios');
-    const mongoose = require('mongoose');
     const Currency = require('../models/Currency');
     var constants = require('../config/constants');
 
-    cron.schedule('*/5 * * * * *', () => {
+    cron.schedule('*/10 * * * * *', () => {
         const cryptoData = async () => {
         try {
-            return await axios.get('https://v6.exchangerate-api.com/v6/8f7c173b500a477b13d4bca3/latest/'+constants.currentCurrency)
+            return await axios.get('https://v6.exchangerate-api.com/v6/8f7c173b500a477b13d4bca3/latest/'+constants.CURRENT_CURRENCY)
         } catch (error) {
                 throw (err)
             }
@@ -24,7 +23,10 @@ const updateCurrencyFunction = () => {
                 {
                     try
                     {
-                        var currencyResponse = await Currency.findOne({ currency_from: constants.currentCurrency, currency_to: currency });
+                        var currencyResponse = await Currency.findOne({ currency_from: constants.CURRENT_CURRENCY, currency_to: currency });
+                        if(typeof currencyResponse == 'undefined' || currencyResponse == null || currencyResponse == '' || currencyResponse.length == 0){
+                            break;
+                        }
                         currencyResponse.conversion_value = currencyData[currency];
                         currencyResponse.save(function (err, res) {
                             if (err) throw (err);

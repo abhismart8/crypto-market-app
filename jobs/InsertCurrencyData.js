@@ -1,14 +1,13 @@
 'use strict';
 
 const insertCurrencyFunction = () => {
-    const mongoose = require('mongoose');
     const axios = require('axios');
     const Currency = require('../models/Currency');
     const constants = require('../config/constants');
 
     const cryptoData = async () => {
     try {
-        return await axios.get('https://v6.exchangerate-api.com/v6/8f7c173b500a477b13d4bca3/latest/'+constants.currentCurrency)
+        return await axios.get('https://v6.exchangerate-api.com/v6/8f7c173b500a477b13d4bca3/latest/'+constants.CURRENT_CURRENCY)
     } catch (error) {
             console.error(error)
         }
@@ -22,7 +21,7 @@ const insertCurrencyFunction = () => {
             for(let currency in currencyData)
             {
                 let currencyResponse = new Currency({
-                    currency_from: constants.currentCurrency,
+                    currency_from: constants.CURRENT_CURRENCY,
                     currency_to: currency,
                     conversion_value: currencyData[currency]
                 })

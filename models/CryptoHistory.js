@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const CryptoHistory = new Schema({
@@ -7,45 +7,45 @@ const CryptoHistory = new Schema({
         required: true
     },
     no_of_days: {
-        type: Number,
+        type: String,
         required: true
     },
     volume: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     volume_change: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     volume_change_pct: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     market_cap: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     market_cap_change: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     market_cap_change_pct: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     price: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     price_change: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     },
     price_change_pct: {
-        type: Number,
-        required: true
+        type: String,
+        required: false
     }
-})
+});
 
-module.exports = mongoose.model('cryptohistory', CryptoHistory)
+module.exports = mongoose.model('cryptohistory', CryptoHistory);
