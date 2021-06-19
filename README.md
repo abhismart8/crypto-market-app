@@ -23,25 +23,29 @@ To run the application: "npm start".
 
 ## API's
 
-Register API:-
-path - /v1/register
-method - POST
-request(JSON) - {"name": "<name>", "email": "<email>", "password": "<password>"}
-response(JSON) - {
-    "success": true,
-    "result": "Registration Successful",
-    "apikey": your_api_key
-}
+Register API:- <br>
+path - /v1/register <br>
+method - POST <br>
+request(JSON) - { <br>
+    "name": "Name", <br>
+    "email": "Email Address", <br>
+    "password": "Password" <br>
+    } <br>
+response(JSON) - { <br>
+    "success": true, <br>
+    "result": "Registration Successful", <br>
+    "apikey": your_api_key <br>
+} <br>
 
-All CryptoCurrencies API:-
-path - /v1/currencies?apikey=your_api_key
-method - GET
-response(JSON) - all crypto data
+All CryptoCurrencies API:- <br>
+path - /v1/currencies?apikey=your_api_key <br>
+method - GET <br>
+response(JSON) - all crypto data <br>
 
-Single CryptoCurrency API:-
-path - /v1/currencies?apikey=your_api_key&id=BTC
-method - GET
-response(JSON) - specified id crypto data
+Single CryptoCurrency API:- <br>
+path - /v1/currencies?apikey=your_api_key&id=BTC <br>
+method - GET <br>
+response(JSON) - specified id crypto data <br>
 
 
 ## THANK YOU. ENJOY.
