@@ -8,14 +8,7 @@ var helmet = require('helmet');
 const mongo = require('./mongo');
 
 const mongodbConnect = async () => {
-    await mongo().then(async mongoose => {
-        try{
-            console.log('Connected to mongo!!');
-        }
-        finally{
-            console.error();
-        }
-    });
+    await mongo();
 };
 
 // const mongodb = 'mongodb://localhost/crypto_market_app'

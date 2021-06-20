@@ -4,7 +4,7 @@ require('dotenv').config();
 var db = 'mongodb://localhost/crypto_market_app';
 if(typeof process.env.ENV_NAME != 'undefined' && process.env.ENV_NAME == 'production'){
     console.log(process.env.ENV_NAME, 'yesyesyes');
-    db = 'mongodb://cryptomarketapp88.herokuapp.com/crypto_market_app';
+    db = 'mongodb://cryptomarketapp88/crypto_market_app';
 }
 
 if(process.env.MONGODB_URI){
