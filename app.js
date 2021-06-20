@@ -3,7 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose')
+var mongoose = require('mongoose');
+var compression = require('compression');
+var helmet = require('helmet');
 
 
 const mongodb = 'mongodb://localhost/crypto_market_app'
@@ -18,6 +20,10 @@ var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+app.use(helmet());
+
+app.use(compression()); //Compress all routes
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,7 +48,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'production' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
