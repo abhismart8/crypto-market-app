@@ -7,8 +7,15 @@ var compression = require('compression');
 var helmet = require('helmet');
 var mongoose = require('mongoose');
 
-var mongodb = 'mongodb://cryptomarketapp88.herokuapp.com/crypto_market_app'
+var mongodb = 'mongodb://cryptomarketapp88/crypto_market_app'
 mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
+.then(x => {
+  console.log(
+      `Connected to Mongo! Database name: "${x.connections[0].name}"`,
+  );
+}).catch(err => {
+  console.error('Error connecting to mongo', err);
+});
 const con = mongoose.connection
 con.on('open', () => {
   console.log('connection established')
