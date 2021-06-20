@@ -7,12 +7,19 @@ var compression = require('compression');
 var helmet = require('helmet');
 var mongoose = require('mongoose');
 
-var mongodb = 'mongodb://cryptomarketapp88/crypto_market_app'
+var mongodb = 'mongodb+srv://abhismart8:190844@cluster0.r4ieb.mongodb.net/crypto_market_app?retryWrites=true&w=majority'
 mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
 .then(x => {
   console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`,
   );
+  // insert and update currency data
+  require('./jobs/InsertCurrencyData')
+  require('./jobs/UpdateCurrencyData')
+
+  // insert and update crypto currency data
+  require('./jobs/InsertCryptoDataFromNomics')
+  require('./jobs/UpdateCryptoDataFromNomics')
 }).catch(err => {
   console.error('Error connecting to mongo', err);
 });

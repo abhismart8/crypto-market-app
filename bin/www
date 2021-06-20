@@ -29,14 +29,6 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-// insert and update currency data
-require('../jobs/InsertCurrencyData')
-require('../jobs/UpdateCurrencyData')
-
-// insert and update crypto currency data
-require('../jobs/InsertCryptoDataFromNomics')
-require('../jobs/UpdateCryptoDataFromNomics')
-
 /**
  * Normalize a port into a number, string, or false.
  */
