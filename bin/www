@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('crypto-market-app:server');
 var http = require('http');
+var envname = process.env.NODE_ENV.trim();
 
 /**
  * Get port from environment and store in Express.
@@ -28,6 +29,24 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+if(envname == 'prod'){
+  // insert and update currency data
+  require('../jobs/UpdateCurrencyData')
+
+  // insert and update crypto currency data
+  require('../jobs/UpdateCryptoDataFromNomics')
+}
+
+if(envname == 'dev'){
+  // insert and update currency data
+  require('../jobs/InsertCurrencyData')
+  require('../jobs/UpdateCurrencyData')
+
+  // insert and update crypto currency data
+  require('../jobs/InsertCryptoDataFromNomics')
+  require('../jobs/UpdateCryptoDataFromNomics')
+}
 
 /**
  * Normalize a port into a number, string, or false.

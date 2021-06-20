@@ -13,13 +13,6 @@ mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
   console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`,
   );
-  // insert and update currency data
-  require('./jobs/InsertCurrencyData')
-  require('./jobs/UpdateCurrencyData')
-
-  // insert and update crypto currency data
-  require('./jobs/InsertCryptoDataFromNomics')
-  require('./jobs/UpdateCryptoDataFromNomics')
 }).catch(err => {
   console.error('Error connecting to mongo', err);
 });
