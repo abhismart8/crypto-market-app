@@ -47,6 +47,9 @@ exports.api = function(req, res, next) {
 
     const singleCryptoData = async (id) => {
         try{
+            if(typeof id === 'undefined' || id == null || id == ''){
+                res.send({"success": false, "error": "Invalid crypto id"});
+            }
             const crypto = await Crypto.find({"id": id}).select({ data_json: 1 });
             if(crypto){
                 return crypto[0].data_json
