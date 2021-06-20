@@ -1,19 +1,32 @@
     
 exports.index = function(req, res, next) { 
     const axios = require('axios');
+    const Crypto = require('../models/CryptoCurrency');
+    const History = require('../models/CryptoHistory');
+    const Currency = require('../models/Currency');
 
     const cryptoData = async () => {
-    try {
-        return await axios.get('https://api.nomics.com/v1/currencies/ticker?key=02ae7188466cc4acd02b0b613c4397ac7a085acb&ids=BTC,ETH,ADA,DOGE,DOT,UNI,SHIB')
-    } catch (error) {
+        try {
+            var cryptoArray = new Array();
+            var cryptoData = await Crypto.find().select({ data_json: 1 }).limit(30);
+            if(cryptoData.length > 0){
+                for(crypto of cryptoData){
+                    if(crypto && typeof crypto.data_json != 'undefined'){
+                        cryptoArray.push(crypto.data_json);
+                    }
+                }
+                return cryptoArray;
+            } 
+        }catch(error) {
             console.error(error)
         }
     }
 
     const getCryptoData = async () => {
+        let currency = await Currency.find({"currency_from": "USD", "currency_to": "INR"});
         const data = await cryptoData();
-        if (data) {
-            res.render('index', { title: 'Crypto Market App' , cryptocurrencies: data.data});
+        if (data && currency.length > 0) {
+            res.render('index', { title: 'Crypto Market App', cryptocurrencies: data, currency: currency[0].conversion_value});
         }
     }
 

@@ -20,9 +20,9 @@ block content
                 img.ui.mini.rounded.image(src=crypto.logo_url)
               td #{crypto.name}
               td #{crypto.symbol}
-              td #{crypto.price} USD
+              td #{parseFloat(crypto.price)*parseFloat(currency)} INR
               td #{crypto.market_cap}
-              td #{crypto.high} USD
+              td #{parseFloat(crypto.high)*parseFloat(currency)} INR
         tfoot
           tr
             th(colspan='6')
