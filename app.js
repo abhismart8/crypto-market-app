@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var compression = require('compression');
-var helmet = require('helmet');
 var mongoose = require('mongoose');
 
 var mongodb = 'mongodb+srv://abhismart8:190844@cluster0.r4ieb.mongodb.net/crypto_market_app?retryWrites=true&w=majority'
@@ -27,8 +26,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-app.use(helmet());
-
 app.use(compression()); //Compress all routes
 
 // view engine setup
@@ -40,6 +37,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('resources')); //This will allow express to access any file
+app.use(express.static('public')); //use middleware to serve static files
 
 app.use('/', indexRouter);
 app.use('/', apiRouter);
