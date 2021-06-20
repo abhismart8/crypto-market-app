@@ -3,23 +3,35 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
 var compression = require('compression');
 var helmet = require('helmet');
+const mongo = require('./mongo');
 
+const mongodbConnect = async () => {
+    await mongo().then(async mongoose => {
+        try{
+            console.log('Connected to mongo!!');
+        }
+        finally{
+            console.error();
+        }
+    });
+};
 
-const mongodb = 'mongodb://localhost/crypto_market_app'
-mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
-const con = mongoose.connection
-con.on('open', () => {
-  // 
-})
+// const mongodb = 'mongodb://localhost/crypto_market_app'
+// mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
+// const con = mongoose.connection
+// con.on('open', () => {
+//   // 
+// })
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+mongodbConnect();
 
 app.use(helmet());
 
