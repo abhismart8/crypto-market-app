@@ -7,7 +7,21 @@
 var app = require('../app');
 var debug = require('debug')('crypto-market-app:server');
 var http = require('http');
-// let models = require('../models');
+const mongo = require('../mongo');
+require('dotenv').config();
+
+var db = 'mongodb://localhost/crypto_market_app';
+console.log(process.env.ENV_NAME, 'yesyesyes');
+if(typeof process.env.ENV_NAME != 'undefined' && process.env.ENV_NAME == 'production'){
+    db = 'mongodb://cryptomarketapp88/crypto_market_app';
+}
+if(process.env.MONGODB_URI){
+    db = process.env.MONGODB_URI;
+}
+const mongodbConnect = async (db) => {
+  await mongo(db);
+};
+mongodbConnect(db);
 
 /**
  * Get port from environment and store in Express.
