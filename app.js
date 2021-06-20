@@ -5,13 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var compression = require('compression');
 var helmet = require('helmet');
+var mongoose = require('mongoose');
 
-// const mongodb = 'mongodb://localhost/crypto_market_app'
-// mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
-// const con = mongoose.connection
-// con.on('open', () => {
-//   // 
-// })
+var mongodb = 'mongodb://cryptomarketapp88.herokuapp.com/crypto_market_app'
+mongoose.connect(mongodb, {useNewUrlParser:true, useUnifiedTopology: true})
+const con = mongoose.connection
+con.on('open', () => {
+  console.log('connection established')
+})
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
