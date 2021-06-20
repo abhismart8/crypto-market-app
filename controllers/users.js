@@ -32,12 +32,19 @@ exports.register = function(req, res, next) {
 
     const getRegisterData = async () => {
         const response = await registerData();
-        if (typeof response.apikey != 'undefined'){
-            
-            res.json({"success": true, "result": "Already Registered", "apikey": response.apikey});
-        }
-        else{
-            res.json({"success": true, "result": "Registration Successful", "apikey": response._id});
+        try{
+            if(typeof response == 'undefined'){
+                res.json({"success": false, "error": "something happened"});
+            }
+            if (typeof response.apikey != 'undefined'){
+                
+                res.json({"success": true, "result": "Already Registered", "apikey": response.apikey});
+            }
+            else{
+                res.json({"success": true, "result": "Registration Successful", "apikey": response._id});
+            }
+        }catch(error){
+            res.json({"success": false, "error": error});
         }
     }
 
