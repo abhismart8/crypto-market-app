@@ -6,7 +6,7 @@ const updateCurrencyFunction = () => {
     const Currency = require('../models/Currency');
     const constants = require('../config/constants');
 
-    cron.schedule('* * * * *', () => {
+    cron.schedule('* */24 * * *', () => {
         const cryptoData = async () => {
         try {
             return await axios.get('https://v6.exchangerate-api.com/v6/8f7c173b500a477b13d4bca3/latest/'+constants.CURRENT_CURRENCY)
