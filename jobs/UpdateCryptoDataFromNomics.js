@@ -7,7 +7,7 @@ const updateCryptoFunction = () => {
     const History = require('../models/CryptoHistory');
     const constants = require('../config/constants');
 
-    cron.schedule('*/10 * * * * *', () => {
+    cron.schedule('* * * * *', () => {
         const cryptoData = async () => {
             try {
                 return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY)
@@ -15,30 +15,31 @@ const updateCryptoFunction = () => {
                 console.error(error)
             }
         }
+
+        var daysArray = ['1d', '7d', '30d', '365d', 'ytd'];
     
         const getCryptoData = async () => {
             const data = await cryptoData();
             if (data){
                 let cryptoCurrencyData = data.data;
-                let daysArray = ['1d', '7d', '30d', '365d', 'ytd'];
-    
+
                 for(let crypto of cryptoCurrencyData){
                     if(typeof crypto == 'undefined' || crypto == null || crypto == '' || crypto.length == 0){
                         break;
                     }
 
-                    var cryptoCurrencyResponse = await Crypto.findOne({ id: crypto.id });
+                    // var cryptoCurrencyResponse = await Crypto.findOne({ id: crypto.id });
                     // if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
                     //     console.log('object');
                     //     break;
                     // }
-                    console.log('object2');
-                    var cryptoHistoryResponse = await History.findOne({ crypto_id: crypto.id });
-                    if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
-                        break;
-                    }
+                    // console.log('object2');
+                    // var cryptoHistoryResponse = await History.findOne({ crypto_id: crypto.id });
+                    // if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
+                    //     break;
+                    // }
     
-                    var historyArray = new Object();
+                    var historyArray = [];
                     for(let day of daysArray){
                         let history = {};
                         history = crypto.ytd;
@@ -50,26 +51,26 @@ const updateCryptoFunction = () => {
                         }
                         try{
                             if(typeof history.market_cap_change != 'undefined'){
-                                history.market_cap = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
+                                history['market_cap'] = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
                             }
                             if(typeof history.market_cap_change != 'undefined'){
-                                history.market_cap = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
+                                history['market_cap'] = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
                             }
                             if(typeof history.price_change != 'undefined'){
-                                history.price = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
+                                history['price'] = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
                             }
     
-                            history.crypto_id = crypto.id;
-                            history.no_of_days = day;
+                            history['crypto_id'] = crypto.id;
+                            history['no_of_days'] = day;
     
                             // saving in db
                             if(typeof history.crypto_id != 'undefined' && typeof history.no_of_days != 'undefined'){
                                 
-                                cryptoHistoryResponse = history;
-                                await History.updateOne({crypto_id:crypto.id}, cryptoHistoryResponse );
+                                // cryptoHistoryResponse = history;
+                                await History.updateOne({crypto_id:crypto.id}, history );
                                 // cryptoHistoryResponse.save()
                             }
-                            console.log('object3')
+                            // console.log('object3')
     
                             // removing crypto_id and no_of_days
                             delete history.crypto_id;
@@ -79,13 +80,13 @@ const updateCryptoFunction = () => {
                             console.log(err)
                         }
     
-                        if(typeof history != 'undefined' && history.length > 0){
+                        if(typeof history != 'undefined' && history){
                             historyArray[day] = history;
                         }
                     }
     
                     if(historyArray.length > 0){
-                        crypto.history = historyArray;
+                        crypto['history'] = historyArray;
                     }
     
                     try{
@@ -106,12 +107,17 @@ const updateCryptoFunction = () => {
                             all_time_high_timestamp: typeof crypto.high_timestamp != 'undefined'? crypto.high_timestamp : null,
                         };
 
-                        if(await createDataJSON(crypto, historyArray)){
-                            cryptoObject.data_json = await createDataJSON(crypto, historyArray);
+                        if(createDataJSON(crypto, historyArray)){
+                            // return false;
+                            cryptoObject['data_json'] = await createDataJSON(crypto, historyArray);
+                            // console.log(cryptoObject['data_json'])
                         }
                         
-                        cryptoCurrencyResponse = cryptoObject;
-                        await Crypto.updateOne({id:crypto.id},cryptoCurrencyResponse);
+                        // cryptoCurrencyResponse = cryptoObject;
+                        // console.log(cryptoObject)
+                        await Crypto.updateOne({id:crypto.id},cryptoObject);
+                        // return false;
+                        // console.log('yes')
                         // cryptoCurrencyResponse.save()  
                     }
                     catch(err){
@@ -125,16 +131,19 @@ const updateCryptoFunction = () => {
 
         const createDataJSON = async (data, history) => {
             try{
-                data.all_time_high = data.high
-                data.all_time_high_timestamp = data.high_timestamp;
+                data['all_time_high'] = data.high
+                data['all_time_high_timestamp'] = data.high_timestamp;
                 for(let day of daysArray){
                     delete data[day]
                 }
-                data.history = history;
+                data['history'] = history;
+                // console.log(data);
+                // return false;
                 return data;
     
             }
             catch(err){
+                console.log(err);
                 return false;
             }
         }
