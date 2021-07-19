@@ -15,7 +15,7 @@ block content
             th All Time High
         tbody
           each crypto in cryptocurrencies
-            tr
+            tr.crypto_element(data-id=crypto.id)(data-rank=crypto.rank)
               td
                 img.ui.mini.rounded.image(src=crypto.logo_url)
               td #{crypto.name}

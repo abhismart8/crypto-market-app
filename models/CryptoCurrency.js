@@ -15,7 +15,7 @@ const CryptoCurrency = new Schema({
         required: false
     },
     rank: {
-        type: String,
+        type: Number,
         required: false
     },
     logo_url: {
