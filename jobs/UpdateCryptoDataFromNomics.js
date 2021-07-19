@@ -7,7 +7,7 @@ const updateCryptoFunction = () => {
     const History = require('../models/CryptoHistory');
     const constants = require('../config/constants');
 
-    cron.schedule('* * * * *', () => {
+    cron.schedule('*/10 * * * * *', () => {
         const cryptoData = async () => {
             try {
                 return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY)
@@ -28,12 +28,14 @@ const updateCryptoFunction = () => {
                     }
 
                     var cryptoCurrencyResponse = await Crypto.findOne({ id: crypto.id });
-                    if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
-                        break;
-                    }
+                    // if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
+                    //     console.log('object');
+                    //     break;
+                    // }
+                    console.log('object2');
                     var cryptoHistoryResponse = await History.findOne({ crypto_id: crypto.id });
                     if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
-                        cryptoHistoryResponse = {};
+                        break;
                     }
     
                     var historyArray = new Object();
@@ -62,9 +64,12 @@ const updateCryptoFunction = () => {
     
                             // saving in db
                             if(typeof history.crypto_id != 'undefined' && typeof history.no_of_days != 'undefined'){
+                                
                                 cryptoHistoryResponse = history;
-                                cryptoHistoryResponse.save()
+                                await History.updateOne({crypto_id:crypto.id}, cryptoHistoryResponse );
+                                // cryptoHistoryResponse.save()
                             }
+                            console.log('object3')
     
                             // removing crypto_id and no_of_days
                             delete history.crypto_id;
@@ -106,7 +111,8 @@ const updateCryptoFunction = () => {
                         }
                         
                         cryptoCurrencyResponse = cryptoObject;
-                        cryptoCurrencyResponse.save()  
+                        await Crypto.updateOne({id:crypto.id},cryptoCurrencyResponse);
+                        // cryptoCurrencyResponse.save()  
                     }
                     catch(err){
                         console.log(err)
