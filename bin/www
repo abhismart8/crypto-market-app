@@ -32,7 +32,7 @@ server.on('listening', onListening);
 // update currency data
 require('../jobs/UpdateCurrencyData')
 // update crypto currency data
-require('../jobs/UpdateCryptoDataFromNomics')
+// require('../jobs/UpdateCryptoDataFromNomics')
 
 // insert currency data
 // require('../jobs/InsertCurrencyData')
