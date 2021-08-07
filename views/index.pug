@@ -23,10 +23,11 @@ block content
               td #{crypto.name}
               td #{crypto.symbol}
               td #{parseFloat(crypto.price)*parseFloat(currency)} INR
-              td #{crypto.market_cap}
+              td #{crypto.market_cap} INR
               td #{parseFloat(crypto.high)*parseFloat(currency)} INR
         tfoot
           tr
             th(colspan='6')
     footer
-      p © #{new Date().getFullYear()} Crypto Market App
+      p © #{new Date().getFullYear()} Crypto Market App || Created by 
+        a( href="https://github.com/abhismart8") Abhishek Shukla
