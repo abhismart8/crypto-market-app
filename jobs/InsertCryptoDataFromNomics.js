@@ -5,7 +5,6 @@ const insertCryptoFunction = () => {
     const Crypto = require('../models/CryptoCurrency');
     const History = require('../models/CryptoHistory');
     const constants = require('../config/constants');
-    const daysArray = ['1d', '7d', '30d', '365d', 'ytd'];
 
     const cryptoData = async () => {
         try {
@@ -15,59 +14,60 @@ const insertCryptoFunction = () => {
         }
     }
 
+    var daysArray = ['1d', '7d', '30d', '365d', 'ytd'];
 
     const getCryptoData = async () => {
         const data = await cryptoData();
         if (data){
             let cryptoCurrencyData = data.data;
 
+            var count = 0;
             for(let crypto of cryptoCurrencyData){
-                if(typeof crypto == 'undefined' || crypto == null || crypto == '' || crypto.length == 0){
+                if(typeof crypto == "undefined" || !crypto){
                     break;
                 }
 
-                var historyArray = new Object();
+                var historyArray = {};
                 for(let day of daysArray){
                     let history = {};
-                    history = crypto.ytd;
-                    if(day != 'ytd'){
+                    if(typeof crypto[day] != "undefined"){
                         history = crypto[day];
-                    }
-                    if(typeof history == 'undefined'){
-                        history = {};
                     }
                     try{
                         if(typeof history.market_cap_change != 'undefined'){
-                            history.market_cap = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
+                            history['market_cap'] = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
+                        }
+                        if(typeof history.market_cap_change != 'undefined'){
+                            history['market_cap'] = (parseInt(crypto.market_cap) + parseInt(history.market_cap_change)).toString();
                         }
                         if(typeof history.price_change != 'undefined'){
-                            history.price = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
+                            history['price'] = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
                         }
 
-                        history.crypto_id = crypto.id;
-                        history.no_of_days = day;
+                        // history['crypto_id'] = crypto.id;
+                        // history['no_of_days'] = day;
 
-                        // saving in db
-                        if(typeof history.crypto_id != 'undefined' && typeof history.no_of_days != 'undefined'){
-                            const cryptoHistoryResponse = new History(history);
-                            cryptoHistoryResponse.save()
-                        }
+                        // // saving in db
+                        // if(typeof history.crypto_id != "undefined" && typeof history.no_of_days != "undefined"){
+                        //     const cryptoHistoryResponse = new History(history);
+                        //     cryptoHistoryResponse.save();
+                        // }
 
-                        // removing crypto_id and no_of_days
-                        delete history.crypto_id;
-                        delete history.no_of_days;
+                        // // removing crypto_id and no_of_days
+                        // delete history.crypto_id;
+                        // delete history.no_of_days;
                     }
                     catch(err){
                         console.log(err)
                     }
 
-                    if(typeof history != 'undefined'){
+                    if(typeof history != "undefined" && history){
                         historyArray[day] = history;
                     }
-                    else{
-                        historyArray[day] = {};
-                    }
                 }
+
+                // history pushed in crypto
+                crypto['history'] = historyArray;
 
                 try{
                     var cryptoObject = {
@@ -87,36 +87,41 @@ const insertCryptoFunction = () => {
                         all_time_high_timestamp: typeof crypto.high_timestamp != 'undefined'? crypto.high_timestamp : null,
                     };
 
-                    if(await createDataJSON(crypto, historyArray)){
-                        cryptoObject.data_json = await createDataJSON(crypto, historyArray);
-                    }
-                    
+                    // history pushed in crypto object
+                    cryptoObject['history'] = historyArray;
+
+                    // data json pushed in crypto object
+                    cryptoObject['data_json'] = await createDataJSON(crypto);
+
                     const cryptoCurrencyResponse = new Crypto(cryptoObject);
                     cryptoCurrencyResponse.save()
+                    console.log('crypto inserted with id: '+cryptoObject.id);
                     
+                    count++;
                 }
                 catch(err){
+                    console.log('crypto insertion failed with id: '+crypto.id);
                     console.log(err)
                 }
             }
 
-            console.log('Crypto data inserted successfully')
+            console.log('All '+count+' Crypto data inserted successfully');
         }
     }
 
-    const createDataJSON = async (data, history) => {
+    const createDataJSON = async (data) => {
         try{
-            data.all_time_high = data.high
-            data.all_time_high_timestamp = data.high_timestamp;
+            data['all_time_high'] = data.high
+            data['all_time_high_timestamp'] = data.high_timestamp;
             for(let day of daysArray){
                 delete data[day]
             }
-            data.history = history;
             return data;
 
         }
         catch(err){
-            return false;
+            console.log(err);
+            return data;
         }
     }
 

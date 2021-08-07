@@ -7,10 +7,10 @@ const updateCryptoFunction = () => {
     const History = require('../models/CryptoHistory');
     const constants = require('../config/constants');
 
-    cron.schedule('* * * * *', () => {
+    cron.schedule('*/10 * * * *', () => {
         const cryptoData = async () => {
             try {
-                return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY)
+                return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY);
             }catch(error) {
                 console.error(error)
             }
@@ -19,35 +19,22 @@ const updateCryptoFunction = () => {
         var daysArray = ['1d', '7d', '30d', '365d', 'ytd'];
     
         const getCryptoData = async () => {
-            const data = await cryptoData();
+            var data = await cryptoData();
             if (data){
                 let cryptoCurrencyData = data.data;
 
+                var count = 0;
                 for(let crypto of cryptoCurrencyData){
-                    if(typeof crypto == 'undefined' || crypto == null || crypto == '' || crypto.length == 0){
+                    
+                    if(typeof crypto == 'undefined' || !crypto){
                         break;
                     }
 
-                    // var cryptoCurrencyResponse = await Crypto.findOne({ id: crypto.id });
-                    // if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
-                    //     console.log('object');
-                    //     break;
-                    // }
-                    // console.log('object2');
-                    // var cryptoHistoryResponse = await History.findOne({ crypto_id: crypto.id });
-                    // if(typeof cryptoHistoryResponse == 'undefined' || cryptoHistoryResponse == null || cryptoHistoryResponse == '' || cryptoHistoryResponse.length == 0){
-                    //     break;
-                    // }
-    
                     var historyArray = [];
                     for(let day of daysArray){
                         let history = {};
-                        history = crypto.ytd;
-                        if(day != 'ytd'){
+                        if(typeof crypto[day] != "undefined"){
                             history = crypto[day];
-                        }
-                        if(typeof history == 'undefined'){
-                            break;
                         }
                         try{
                             if(typeof history.market_cap_change != 'undefined'){
@@ -60,35 +47,36 @@ const updateCryptoFunction = () => {
                                 history['price'] = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
                             }
     
-                            history['crypto_id'] = crypto.id;
-                            history['no_of_days'] = day;
+                            // history['crypto_id'] = crypto.id;
+                            // history['no_of_days'] = day;
     
-                            // saving in db
-                            if(typeof history.crypto_id != 'undefined' && typeof history.no_of_days != 'undefined'){
-                                
-                                // cryptoHistoryResponse = history;
-                                await History.updateOne({crypto_id:crypto.id}, history );
-                                // cryptoHistoryResponse.save()
-                            }
-                            // console.log('object3')
-    
-                            // removing crypto_id and no_of_days
-                            delete history.crypto_id;
-                            delete history.no_of_days;
+                            // // saving in db
+                            // if(typeof history.crypto_id != "undefined" && typeof history.no_of_days != "undefined"){
+                            //     var cryptoHistoryObjectData = await History.findOne({ crypto_id: crypto.id });
+                            //     if(cryptoHistoryObjectData){
+                            //         History.updateOne({crypto_id:crypto.id}, history );
+                            //     }else{
+                            //         const cryptoHistoryResponse = new History(history);
+                            //         cryptoHistoryResponse.save();
+                            //     }
+                            // }
+
+                            // // removing crypto_id and no_of_days
+                            // delete history.crypto_id;
+                            // delete history.no_of_days;
                         }
                         catch(err){
                             console.log(err)
                         }
     
-                        if(typeof history != 'undefined' && history){
+                        if(typeof history != "undefined" && history){
                             historyArray[day] = history;
                         }
                     }
-    
-                    if(historyArray.length > 0){
-                        crypto['history'] = historyArray;
-                    }
-    
+                    
+                    // history pushed in crypto
+                    crypto['history'] = historyArray;
+                    
                     try{
                         var cryptoObject = {
                             id: crypto.id,
@@ -107,44 +95,48 @@ const updateCryptoFunction = () => {
                             all_time_high_timestamp: typeof crypto.high_timestamp != 'undefined'? crypto.high_timestamp : null,
                         };
 
-                        if(createDataJSON(crypto, historyArray)){
-                            // return false;
-                            cryptoObject['data_json'] = await createDataJSON(crypto, historyArray);
-                            // console.log(cryptoObject['data_json'])
+                        // history pushed in crypto object
+                        cryptoObject['history'] = historyArray;
+
+                        // data json pushed in crypto object
+                        cryptoObject['data_json'] = await createDataJSON(crypto);
+
+                        var cryptoObjectData = await Crypto.findOne({ id: cryptoObject.id });
+
+                        if(cryptoObjectData){
+                            Crypto.updateOne({id:cryptoObject.id},cryptoObject);
+                            console.log('crypto updated with id: '+cryptoObject.id);
+                        }else{
+                            const cryptoCurrencyResponse = new Crypto(cryptoObject);
+                            cryptoCurrencyResponse.save();
+                            console.log('crypto inserted with id: '+cryptoObject.id);
                         }
-                        
-                        // cryptoCurrencyResponse = cryptoObject;
-                        // console.log(cryptoObject)
-                        await Crypto.updateOne({id:crypto.id},cryptoObject);
-                        // return false;
-                        // console.log('yes')
-                        // cryptoCurrencyResponse.save()  
+
+                        count++;
                     }
                     catch(err){
+                        console.log('crypto updated failed with id: '+crypto.id);
                         console.log(err)
                     }
                 }
     
-                console.log('Crypto data updated successfully')
+                console.log('All '+count+' Crypto data updated successfully');
             }
         }
 
-        const createDataJSON = async (data, history) => {
+        const createDataJSON = async (data) => {
             try{
                 data['all_time_high'] = data.high
                 data['all_time_high_timestamp'] = data.high_timestamp;
                 for(let day of daysArray){
                     delete data[day]
                 }
-                data['history'] = history;
-                // console.log(data);
-                // return false;
                 return data;
     
             }
             catch(err){
                 console.log(err);
-                return false;
+                return data;
             }
         }
     
