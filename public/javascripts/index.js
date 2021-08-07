@@ -26,7 +26,7 @@ const getCrypto = (rank) => {
                 <td>'+crypto.rank+'</td>\
                 <td><img class="ui mini rounded image" src="'+crypto.logo_url+'"></td>\
                 <td>'+crypto.name+'</td><td>'+crypto.symbol+'</td><td>'+parseFloat(crypto.price)*parseFloat(currency)+' INR</td>\
-                <td>'+crypto.market_cap+'</td>\
+                <td>'+crypto.market_cap+' INR</td>\
                 <td>'+parseFloat(crypto.high)*parseFloat(currency)+' INR</td></tr>');
                 $(window).data('ajaxready', true);
             }
