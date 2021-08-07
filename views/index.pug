@@ -7,6 +7,7 @@ block content
       table.ui.celled.table.center.aligned
         thead
           tr
+            th Rank
             th Logo
             th Name
             th Symbol
@@ -16,6 +17,7 @@ block content
         tbody
           each crypto in cryptocurrencies
             tr.crypto_element(data-id=crypto.id)(data-rank=crypto.rank)
+              td #{crypto.rank}
               td
                 img.ui.mini.rounded.image(src=crypto.logo_url)
               td #{crypto.name}

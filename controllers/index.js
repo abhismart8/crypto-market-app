@@ -8,7 +8,7 @@ exports.index = function(req, res, next) {
     const cryptoData = async () => {
         try {
             var cryptoArray = new Array();
-            var cryptoData = await Crypto.find().select({ data_json: 1 }).limit(30);
+            var cryptoData = await Crypto.find({rank: {$gte:1}}).select({ data_json: 1 }).sort([['rank','ascending']]).limit(30);
             if(cryptoData.length > 0){
                 for(crypto of cryptoData){
                     if(crypto && typeof crypto.data_json != 'undefined'){
