@@ -38,13 +38,10 @@ exports.getData = function(req, res, next) {
     const cryptoData = async () => {
         try {
             var cryptoArray = new Array();
-            var cryptoData = await Crypto.find({rank: { $gt: rankVar}}).select({ data_json: 1 }).limit(10);
-            // console.log(cryptoData);
+            var cryptoData = await Crypto.find({rank: { $gt: rankVar}}).select({ data_json: 1 }).sort([['rank','ascending']]).limit(10);
             if(cryptoData.length > 0){
                 for(crypto of cryptoData){
-                    // if(crypto && typeof crypto.data_json != 'undefined'){
-                        cryptoArray.push(crypto.data_json);
-                    // }
+                    cryptoArray.push(crypto.data_json);
                 }
                 return cryptoArray;
             }
