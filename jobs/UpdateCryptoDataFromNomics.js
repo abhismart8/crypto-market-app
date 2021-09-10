@@ -86,16 +86,15 @@ const updateCryptoFunction = () => {
                         var cryptoObjectData = await Crypto.findOne({ id: cryptoObject.id });
 
                         if(cryptoObjectData){
-                            let temp = await Crypto.findOneAndUpdate({id:cryptoObject.id}, cryptoObject,
+                            await Crypto.findOneAndUpdate({id:cryptoObject.id}, cryptoObject,
                             function (err, res) {
                                 if (err){
                                     console.log(err)
                                 }
                                 else{
-                                    console.log("Updated User : ", res);
+                                    console.log('crypto updated with id: '+cryptoObject.id);
                                 }
                             });
-                            console.log('crypto updated with id: '+cryptoObject.id);
                         }else{
                             const cryptoCurrencyResponse = new Crypto(cryptoObject);
                             cryptoCurrencyResponse.save();
