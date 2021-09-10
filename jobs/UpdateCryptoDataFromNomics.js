@@ -7,7 +7,7 @@ const updateCryptoFunction = () => {
     const History = require('../models/CryptoHistory');
     const constants = require('../config/constants');
 
-    cron.schedule('*/10 * * * *', () => {
+    cron.schedule('* * * * *', () => {
         const cryptoData = async () => {
             try {
                 return await axios.get('https://api.nomics.com/v1/currencies/ticker?key='+constants.NOMICS_API_KEY);
@@ -46,24 +46,6 @@ const updateCryptoFunction = () => {
                             if(typeof history.price_change != 'undefined'){
                                 history['price'] = (parseInt(crypto.price) + parseInt(history.price_change)).toString();
                             }
-    
-                            // history['crypto_id'] = crypto.id;
-                            // history['no_of_days'] = day;
-    
-                            // // saving in db
-                            // if(typeof history.crypto_id != "undefined" && typeof history.no_of_days != "undefined"){
-                            //     var cryptoHistoryObjectData = await History.findOne({ crypto_id: crypto.id });
-                            //     if(cryptoHistoryObjectData){
-                            //         History.updateOne({crypto_id:crypto.id}, history );
-                            //     }else{
-                            //         const cryptoHistoryResponse = new History(history);
-                            //         cryptoHistoryResponse.save();
-                            //     }
-                            // }
-
-                            // // removing crypto_id and no_of_days
-                            // delete history.crypto_id;
-                            // delete history.no_of_days;
                         }
                         catch(err){
                             console.log(err)
@@ -104,7 +86,15 @@ const updateCryptoFunction = () => {
                         var cryptoObjectData = await Crypto.findOne({ id: cryptoObject.id });
 
                         if(cryptoObjectData){
-                            Crypto.updateOne({id:cryptoObject.id},cryptoObject);
+                            let temp = await Crypto.findOneAndUpdate({id:cryptoObject.id}, cryptoObject,
+                            function (err, res) {
+                                if (err){
+                                    console.log(err)
+                                }
+                                else{
+                                    console.log("Updated User : ", res);
+                                }
+                            });
                             console.log('crypto updated with id: '+cryptoObject.id);
                         }else{
                             const cryptoCurrencyResponse = new Crypto(cryptoObject);
